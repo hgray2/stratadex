@@ -13,11 +13,13 @@ namespace stratadex{
     class Stratagem{
         public:
             Stratagem(std::string name, std::vector<ComboDirection> combo);
+            Stratagem();
             ~Stratagem();
 
             // void set
             void setIconPath();
 
+            std::string getName();
         
 
         protected:

@@ -18,17 +18,22 @@ qt_standard_project_setup()
 
 set(SRCS
     src/main.cpp
-    src/main_menu.cpp
     src/quiz.cpp
+    src/main_menu.cpp
+    src/main_window.cpp
     src/stratagem.cpp
+    src/stratagem_model.cpp
 )
 
 set(EXEC_TARGET "Stratadex")
 
 qt_add_executable(${EXEC_TARGET} ${SRCS})
 
-target_link_libraries(${EXEC_TARGET} PRIVATE 
+target_include_directories(${EXEC_TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+# qt_add_exec links Qt6::Core by default.
+target_link_libraries(${EXEC_TARGET} PUBLIC 
     Qt6::Widgets
-    Qt6::Core    
     Qt6::Gui
 )
+

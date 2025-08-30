@@ -1,16 +1,16 @@
 #include <QApplication>
 #include <QWidget>
 
-#include "main_menu.hpp"
+#include "main_window.hpp"
 
 using namespace stratadex;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    MainMenu main_menu(nullptr);
+    StratadexMainWindow window(nullptr);
 
-    main_menu.show();
+    window.show();
 
     return app.exec();
 }

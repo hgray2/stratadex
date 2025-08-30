@@ -6,10 +6,19 @@ Stratagem::Stratagem(std::string name, std::vector<ComboDirection> combo) : name
 
 }
 
+Stratagem::Stratagem()
+{
+}
+
 Stratagem::~Stratagem()
 {
 }
 
 void Stratagem::setIconPath()
 {
+}
+
+std::string stratadex::Stratagem::getName()
+{
+    return this->name;
 }
