@@ -22,3 +22,8 @@ std::string stratadex::Stratagem::getName()
 {
     return this->name;
 }
+
+std::vector<ComboDirection> stratadex::Stratagem::getComboSequence()
+{
+    return this->combo;
+}

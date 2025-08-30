@@ -20,6 +20,8 @@ namespace stratadex{
             void setIconPath();
 
             std::string getName();
+
+            std::vector<ComboDirection> getComboSequence();
         
 
         protected:

@@ -12,7 +12,16 @@ ui(new Ui::Quiz)
     this->ui->setupUi(this);
     this->model = StratagemModel::getInstance();
 
-    connect(ui->lineEdit, &QLineEdit::textChanged, this, &Quiz::handleInputChanged);
+    strat_combo_edit = new StratComboEdit();
+
+    this->ui->inputLayout->addWidget(strat_combo_edit);
+
+    // this->ui->
+
+    connect(strat_combo_edit, &StratComboEdit::comboUpdated, this, &Quiz::handleComboUpdated);
+
+    connect(this, &Quiz::comboPassed, strat_combo_edit, &StratComboEdit::handleComboPassed);
+    connect(this, &Quiz::comboFailed, strat_combo_edit, &StratComboEdit::handleComboFailed);
 }
 
 stratadex::Quiz::~Quiz()
@@ -21,12 +30,10 @@ stratadex::Quiz::~Quiz()
 
 void Quiz::startQuiz()
 {
-
     pickNewStrat();
 
-
-
-
+    // We want to give the edit focus immediately.
+    this->strat_combo_edit->setFocus();
 }
 
 void stratadex::Quiz::pickNewStrat()
@@ -49,13 +56,17 @@ void stratadex::Quiz::pickNewStrat()
     this->ui->activeStratLabel->setText(strat_name);
 }
 
-void Quiz::handleInputChanged(QString input)
+void Quiz::handleComboUpdated()
 {
 
-    QString activeName = QString(this->activeStratagem.getName().c_str());
-    if(input.compare(activeName) == 0){
+    // QString activeName = QString(this->activeStratagem.getName().c_str());
+
+    std::vector<ComboDirection> activeComboSequence = this->activeStratagem.getComboSequence();
+
+    if(activeComboSequence == this->strat_combo_edit->getComboSequence()){
         qDebug() << "Match!\n";
+
+        emit comboPassed();
         pickNewStrat();
     }
-
 }

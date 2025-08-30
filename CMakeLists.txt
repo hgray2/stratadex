@@ -23,6 +23,7 @@ set(SRCS
     src/main_window.cpp
     src/stratagem.cpp
     src/stratagem_model.cpp
+    src/strat_combo_edit.cpp
 )
 
 set(EXEC_TARGET "Stratadex")

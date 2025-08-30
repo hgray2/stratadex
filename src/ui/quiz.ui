@@ -27,15 +27,16 @@
      </property>
     </spacer>
    </item>
-   <item alignment="Qt::AlignmentFlag::AlignHCenter">
-    <widget class="QLabel" name="activeStratLabel">
-     <property name="text">
-      <string>Active Stratagem</string>
-     </property>
-    </widget>
-   </item>
    <item>
-    <widget class="QLineEdit" name="lineEdit"/>
+    <layout class="QVBoxLayout" name="inputLayout">
+     <item alignment="Qt::AlignmentFlag::AlignHCenter">
+      <widget class="QLabel" name="activeStratLabel">
+       <property name="text">
+        <string>Active Stratagem</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer_2">

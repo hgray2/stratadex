@@ -5,8 +5,8 @@
 
 #include <QWidget>
 
+#include "strat_combo_edit.hpp"
 #include "stratagem_model.hpp"
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui{
@@ -20,14 +20,20 @@ namespace stratadex{
     {
         Q_OBJECT
         public:
-            Quiz(QWidget *parent); 
+            Quiz(QWidget *parent = nullptr); 
             ~Quiz(); 
 
             // Sets up and starts a new quiz.
             void startQuiz();
 
+        signals:
+            void comboPassed();
+            void comboFailed();
+
         private:
             Ui::Quiz *ui;
+
+            StratComboEdit *strat_combo_edit;
 
             StratagemModel *model;
 
@@ -36,7 +42,7 @@ namespace stratadex{
             std::default_random_engine gen;
             void pickNewStrat();
 
-            void handleInputChanged(QString input);
+            void handleComboUpdated();
 
 
     };
