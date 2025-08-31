@@ -22,6 +22,8 @@ MainMenu::MainMenu(QWidget *parent) :
 
     model->setNumExercises(ui->numExecSpinBox->value());
 
+    QImage *image = new QImage(":/resource/anti_material_file_icon.png");
+
     // Configure the strat lists
     QSize stratIconSize = QSize(50,50);
     QFont stratFont("Arial", 10, QFont::Bold);

@@ -83,5 +83,13 @@
         <file>resource/super_earth_flag_icon.png</file>
         <file>resource/supply_pack_icon.png</file>
         <file>resource/tesla_tower_icon.png</file> 
+        <file>resource/up_arrow_icon.png</file> 
+        <file>resource/down_arrow_icon.png</file> 
+        <file>resource/left_arrow_icon.png</file> 
+        <file>resource/right_arrow_icon.png</file> 
+        <file>resource/up_arrow_inactive_icon.png</file> 
+        <file>resource/down_arrow_inactive_icon.png</file> 
+        <file>resource/left_arrow_inactive_icon.png</file> 
+        <file>resource/right_arrow_inactive_icon.png</file> 
     </qresource>
 </RCC>

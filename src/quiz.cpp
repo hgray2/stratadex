@@ -64,6 +64,13 @@ void stratadex::Quiz::pickNewStrat()
     // Update the UI.
     QString strat_name = QString(activeStratagem.getName().c_str());
     this->ui->activeStratLabel->setText(strat_name);
+
+    QIcon strat_icon = QIcon(activeStratagem.getIconPath());
+    this->ui->activeStratIconLabel->setPixmap(strat_icon.pixmap(QSize(50,50)));
+
+    // Icons for the combination
+    clearComboIcons();
+    addComboIcons();
 }
 
 void Quiz::handleComboUpdated()
@@ -79,7 +86,34 @@ void Quiz::handleComboUpdated()
         // If any input sequence mismatches a prefix of the active sequence, we report a failure.
         if(activeComboSequence.at(i) != inputComboSequence.at(i)){
             match = false;
+
+            // Reset the combo icons
+            clearComboIcons();
+            addComboIcons();
+
             emit comboFailed();
+        } else{
+            // Update the arrow to indicate a matching prefix.
+            QLabel *arrowLabel = static_cast<QLabel*>(this->ui->comboLayout->itemAt(i)->widget());
+
+            ComboDirection direction = activeComboSequence.at(i);
+            QIcon icon;
+            switch(direction){
+                case UP:
+                    icon = QIcon(":/resource/up_arrow_icon.png");
+                    break;
+                case DOWN:
+                    icon = QIcon(":/resource/down_arrow_icon.png");
+                    break;
+                case LEFT:
+                    icon = QIcon(":/resource/left_arrow_icon.png");
+                    break;
+                case RIGHT:
+                    icon = QIcon(":/resource/right_arrow_icon.png");
+                    break;
+            }  
+
+            arrowLabel->setPixmap(icon.pixmap(QSize(25,25)));
         }
     }
 
@@ -110,4 +144,41 @@ void Quiz::displayPass()
 
 void Quiz::displayFail()
 {
+}
+
+void stratadex::Quiz::clearComboIcons()
+{
+    // Clear the combo layout
+    size_t N = this->ui->comboLayout->count();
+    for(size_t i = 0; i < N; i++){
+        QLayoutItem *toRemove = this->ui->comboLayout->takeAt(0);
+        this->ui->comboLayout->removeWidget(toRemove->widget());
+        delete toRemove->widget();
+    }
+}
+
+void stratadex::Quiz::addComboIcons()
+{
+    for(ComboDirection direction : activeStratagem.getComboSequence()){
+        QLabel *dirLabel = new QLabel();
+        QIcon icon;
+        switch(direction){
+            case UP:
+                icon = QIcon(":/resource/up_arrow_inactive_icon.png");
+                break;
+            case DOWN:
+                icon = QIcon(":/resource/down_arrow_inactive_icon.png");
+                break;
+            case LEFT:
+                icon = QIcon(":/resource/left_arrow_inactive_icon.png");
+                break;
+            case RIGHT:
+                icon = QIcon(":/resource/right_arrow_inactive_icon.png");
+                break;
+        }  
+
+        dirLabel->setPixmap(icon.pixmap(QSize(25,25)));
+
+        this->ui->comboLayout->addWidget(dirLabel);
+    }
 }

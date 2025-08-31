@@ -53,6 +53,12 @@ namespace stratadex{
 
             /// @brief Updates the UI to indicate a failing combo.
             void displayFail();
+
+            /// @brief Resets the icons for the current stratagem combo to inactive.
+            void addComboIcons();
+
+            /// @brief Removes all of the icons for the current stratagem combo.
+            void clearComboIcons();
     };
 
 }
