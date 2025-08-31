@@ -10,13 +10,15 @@ project(
 
 set(CMAKE_CXX_STANDARD 17)
 set(AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
-# find_package(SFML COMPONENTS graphics window system REQUIRED)
 find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+
 
 qt_standard_project_setup()
 
 set(SRCS
+    stratadex.qrc
     src/main.cpp
     src/quiz.cpp
     src/main_menu.cpp
@@ -28,7 +30,7 @@ set(SRCS
 
 set(EXEC_TARGET "Stratadex")
 
-qt_add_executable(${EXEC_TARGET} ${SRCS})
+qt_add_executable(${EXEC_TARGET} WIN32 ${SRCS})
 
 target_include_directories(${EXEC_TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
@@ -37,4 +39,7 @@ target_link_libraries(${EXEC_TARGET} PUBLIC
     Qt6::Widgets
     Qt6::Gui
 )
+
+
+
 

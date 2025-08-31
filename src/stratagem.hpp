@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <vector>
 
+#include <QString>
+
 #include "combo_direction.hpp"
 
 namespace fs = std::filesystem;
@@ -17,7 +19,8 @@ namespace stratadex{
             ~Stratagem();
 
             // void set
-            void setIconPath();
+            QString getIconPath();
+            void setIconPath(QString path);
 
             std::string getName();
 
@@ -29,6 +32,8 @@ namespace stratadex{
             std::string name;
             // a stratagem code combo
             std::vector<ComboDirection> combo;
+
+            QString iconPath;
     };
 }
 

@@ -30,6 +30,8 @@ namespace stratadex{
             void comboPassed();
             void comboFailed();
 
+            void returnToMainMenu();
+
         private:
             Ui::Quiz *ui;
 
@@ -39,12 +41,18 @@ namespace stratadex{
 
             Stratagem activeStratagem;
 
+            size_t exerciseCount;
+
             std::default_random_engine gen;
             void pickNewStrat();
 
             void handleComboUpdated();
 
+            /// @brief Updates the UI to indicate a passing combo.
+            void displayPass();
 
+            /// @brief Updates the UI to indicate a failing combo.
+            void displayFail();
     };
 
 }

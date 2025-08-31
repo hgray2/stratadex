@@ -23,6 +23,15 @@ ui(new Ui::StratadexMainWindow)
         }
     );
 
+    QObject::connect(
+        this->quiz_widget, 
+        &Quiz::returnToMainMenu, 
+        this, 
+        [=](){ 
+            this->UpdateCurrentWidget(this->main_menu_widget); 
+        }
+    );
+
     this->ui->setupUi(this);
 
     this->UpdateCurrentWidget(this->main_menu_widget);
@@ -39,5 +48,6 @@ void StratadexMainWindow::UpdateCurrentWidget(QWidget *widget)
         this->current_widget->setVisible(false);
     }
     current_widget = widget;
+    current_widget->setVisible(true);
     this->ui->horizontalLayout->addWidget(widget);
 }

@@ -30,9 +30,13 @@ namespace stratadex{
 
             void BeginButtonCallback();
 
-            void HandleStratagemClicked(QListWidgetItem *item);
+            void handleAvailableStratClicked(QListWidgetItem *item);
+
+            void handleActiveStratClicked(QListWidgetItem *item);
 
             void handleActiveStratAdded(std::string strat_name);
+
+            void handleNumExecChanged(int num_exec);
     };
 }
 
