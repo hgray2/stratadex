@@ -4,6 +4,7 @@
 #include <random>
 
 #include <QWidget>
+#include <QSoundEffect>
 
 #include "strat_combo_edit.hpp"
 #include "stratagem_model.hpp"
@@ -43,6 +44,10 @@ namespace stratadex{
 
             size_t exerciseCount;
 
+            QSoundEffect passSoundEffect;
+            QSoundEffect inputSoundEffect;
+            QSoundEffect failSoundEffect;
+
             std::default_random_engine gen;
             void pickNewStrat();
 
@@ -59,6 +64,10 @@ namespace stratadex{
 
             /// @brief Removes all of the icons for the current stratagem combo.
             void clearComboIcons();
+
+            void handleComboPassed();
+
+            void handleComboFailed();
     };
 
 }

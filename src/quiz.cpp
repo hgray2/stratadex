@@ -1,5 +1,7 @@
 #include <unordered_map>
 
+#include <QUrl>
+
 #include "ui/ui_quiz.h"
 #include "quiz.hpp"
 
@@ -15,12 +17,33 @@ ui(new Ui::Quiz)
     strat_combo_edit = new StratComboEdit();
     exerciseCount = 0;
 
+    /// Sounds
+    this->inputSoundEffect.setSource(QUrl::fromLocalFile(":/resource/sounds/input_sound.wav"));
+    this->inputSoundEffect.setLoopCount(1);
+    this->inputSoundEffect.setVolume(0.25f);
+
+    this->passSoundEffect.setSource(QUrl::fromLocalFile(":/resource/sounds/pass_sound.wav"));
+    this->passSoundEffect.setLoopCount(1);
+    this->passSoundEffect.setVolume(0.25f);
+
+    this->failSoundEffect.setSource(QUrl::fromLocalFile(":/resource/sounds/fail_sound.wav"));
+    this->failSoundEffect.setLoopCount(1);
+    this->failSoundEffect.setVolume(0.25f);
+
     this->ui->inputLayout->addWidget(strat_combo_edit);
 
     connect(strat_combo_edit, &StratComboEdit::comboUpdated, this, &Quiz::handleComboUpdated);
+    connect(ui->quitButton, &QPushButton::clicked, this, [=](){ 
+        this->exerciseCount = 0; 
+        emit returnToMainMenu(); 
+    });
 
     connect(this, &Quiz::comboPassed, strat_combo_edit, &StratComboEdit::handleComboPassed);
     connect(this, &Quiz::comboFailed, strat_combo_edit, &StratComboEdit::handleComboFailed);
+
+    connect(this, &Quiz::comboPassed, this, &Quiz::handleComboPassed);
+    connect(this, &Quiz::comboFailed, this, &Quiz::handleComboFailed);
+
 }
 
 stratadex::Quiz::~Quiz()
@@ -75,9 +98,6 @@ void stratadex::Quiz::pickNewStrat()
 
 void Quiz::handleComboUpdated()
 {
-
-    // QString activeName = QString(this->activeStratagem.getName().c_str());
-
     std::vector<ComboDirection> activeComboSequence = this->activeStratagem.getComboSequence();
     std::vector<ComboDirection> inputComboSequence = this->strat_combo_edit->getComboSequence();
 
@@ -86,11 +106,6 @@ void Quiz::handleComboUpdated()
         // If any input sequence mismatches a prefix of the active sequence, we report a failure.
         if(activeComboSequence.at(i) != inputComboSequence.at(i)){
             match = false;
-
-            // Reset the combo icons
-            clearComboIcons();
-            addComboIcons();
-
             emit comboFailed();
         } else{
             // Update the arrow to indicate a matching prefix.
@@ -100,40 +115,32 @@ void Quiz::handleComboUpdated()
             QIcon icon;
             switch(direction){
                 case UP:
-                    icon = QIcon(":/resource/up_arrow_icon.png");
+                    icon = QIcon(":/resource/icons/up_arrow_icon.png");
                     break;
                 case DOWN:
-                    icon = QIcon(":/resource/down_arrow_icon.png");
+                    icon = QIcon(":/resource/icons/down_arrow_icon.png");
                     break;
                 case LEFT:
-                    icon = QIcon(":/resource/left_arrow_icon.png");
+                    icon = QIcon(":/resource/icons/left_arrow_icon.png");
                     break;
                 case RIGHT:
-                    icon = QIcon(":/resource/right_arrow_icon.png");
+                    icon = QIcon(":/resource/icons/right_arrow_icon.png");
                     break;
             }  
 
             arrowLabel->setPixmap(icon.pixmap(QSize(25,25)));
+            
+
         }
     }
 
     // If we matched so far AND the sequences are the same length, check if we passed.
     if(match && activeComboSequence.size() == inputComboSequence.size()){
         if(activeComboSequence == this->strat_combo_edit->getComboSequence()){
-            qDebug() << "Match!\n";
-
-            this->ui->quizProgress->setValue(exerciseCount);
-
             emit comboPassed();
-
-            if(exerciseCount < this->model->getNumExercises()){
-                pickNewStrat();
-            } else{ 
-                // Then that was the end, reset state and return to main menu.
-                this->exerciseCount = 0;
-                emit returnToMainMenu();
-            }
         }
+    } else{
+        inputSoundEffect.play();
     }
 }
 
@@ -164,16 +171,16 @@ void stratadex::Quiz::addComboIcons()
         QIcon icon;
         switch(direction){
             case UP:
-                icon = QIcon(":/resource/up_arrow_inactive_icon.png");
+                icon = QIcon(":/resource/icons/up_arrow_inactive_icon.png");
                 break;
             case DOWN:
-                icon = QIcon(":/resource/down_arrow_inactive_icon.png");
+                icon = QIcon(":/resource/icons/down_arrow_inactive_icon.png");
                 break;
             case LEFT:
-                icon = QIcon(":/resource/left_arrow_inactive_icon.png");
+                icon = QIcon(":/resource/icons/left_arrow_inactive_icon.png");
                 break;
             case RIGHT:
-                icon = QIcon(":/resource/right_arrow_inactive_icon.png");
+                icon = QIcon(":/resource/icons/right_arrow_inactive_icon.png");
                 break;
         }  
 
@@ -181,4 +188,26 @@ void stratadex::Quiz::addComboIcons()
 
         this->ui->comboLayout->addWidget(dirLabel);
     }
+}
+
+void Quiz::handleComboPassed(){
+
+    this->passSoundEffect.play();
+    this->ui->quizProgress->setValue(exerciseCount);
+
+    if(exerciseCount < this->model->getNumExercises()){
+        pickNewStrat();
+    } else{ 
+        // Then that was the end, reset state and return to main menu.
+        this->exerciseCount = 0;
+        emit returnToMainMenu();
+    }
+}
+
+void Quiz::handleComboFailed(){
+    this->failSoundEffect.play();
+
+    // Reset the combo icons
+    clearComboIcons();
+    addComboIcons();
 }

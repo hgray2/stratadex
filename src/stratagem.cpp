@@ -20,7 +20,7 @@ Stratagem::Stratagem(std::string name, std::vector<ComboDirection> combo) : name
     path_name = path_name_list.join("_");
 
 
-    this->iconPath = QString(":/resource/" + path_name + "_icon.png");
+    this->iconPath = QString(":/resource/icons/" + path_name + "_icon.png");
 }
 
 Stratagem::Stratagem()

@@ -37,6 +37,8 @@ namespace stratadex{
             void handleActiveStratAdded(std::string strat_name);
 
             void handleNumExecChanged(int num_exec);
+
+            void handleSearchFieldUpdated(QString query);
     };
 }
 

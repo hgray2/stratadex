@@ -2,6 +2,8 @@
 
 #include <QPushButton>
 #include <QStandardItemModel>
+#include <QLineEdit>
+#include <QListWidgetItem>
 #include <QMessageBox>
 #include <QDebug>
 #include <QFont>
@@ -44,13 +46,17 @@ MainMenu::MainMenu(QWidget *parent) :
         QListWidgetItem *item = new QListWidgetItem(strat_icon, strat_name);
 
         ui->stratListAvailable->addItem(item);
-        
-        // new QListWidgetItem(QIcon(strat.getIconPath()), QString(strat.getName().c_str()), ui->stratListAvailable);
-        // new QListWidgetItem(strat_entry.first.c_str(), ui->stratListAvailable);
-
     }
 
     connect(ui->begin_button, &QPushButton::clicked, this, &MainMenu::BeginButtonCallback);
+
+    connect(ui->stats_button, &QPushButton::clicked, this, [=](){
+        QMessageBox *dialog = new QMessageBox();
+        dialog->setText("This feature has not been implemented yet.");
+        dialog->show();
+    });
+
+
 
     connect(ui->stratListAvailable, &QListWidget::itemClicked, this, &MainMenu::handleAvailableStratClicked);
 
@@ -58,7 +64,10 @@ MainMenu::MainMenu(QWidget *parent) :
 
     connect(ui->numExecSpinBox, &QSpinBox::valueChanged, this, &MainMenu::handleNumExecChanged);
 
+    connect(ui->search_line_edit, &QLineEdit::textChanged, this, &MainMenu::handleSearchFieldUpdated);
+
     connect(model, &StratagemModel::activeStratAdded, this, &MainMenu::handleActiveStratAdded);
+
 }
 
 MainMenu::~MainMenu()
@@ -107,4 +116,17 @@ void MainMenu::handleActiveStratAdded(std::string strat_name)
 void stratadex::MainMenu::handleNumExecChanged(int num_exec)
 {
     this->model->setNumExercises(num_exec);
+}
+
+void stratadex::MainMenu::handleSearchFieldUpdated(QString query)
+{
+    for(size_t i = 0; i < ui->stratListAvailable->count(); i++){
+        QListWidgetItem *item = ui->stratListAvailable->item(i);
+
+        if(item->text().contains(query, Qt::CaseInsensitive)){
+            item->setHidden(false);
+        } else{
+            item->setHidden(true);
+        }
+    }
 }

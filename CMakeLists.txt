@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Multimedia Widgets REQUIRED)
 
 
 qt_standard_project_setup()
@@ -38,6 +38,7 @@ target_include_directories(${EXEC_TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(${EXEC_TARGET} PUBLIC 
     Qt6::Widgets
     Qt6::Gui
+    Qt6::Multimedia
 )
 
 
