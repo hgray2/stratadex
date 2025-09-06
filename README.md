@@ -22,7 +22,5 @@ No copyright infringement is intended.
 
 - Sci-Fi Click by Jofae -- https://freesound.org/s/383212/ -- License: Creative Commons 0
 Stratadex is a tool that allows you to practice stratagem combinations from Helldivers 2.
-
-<img width=75% alt="main_menu" src="https://github.com/user-attachments/assets/3d2f144e-f608-479d-ab38-68023ad5c144" />
-
-<img width=75% alt="quiz" src="https://github.com/user-attachments/assets/29c261cf-2075-4efe-9a2f-9f6cbfb5c884" />
+<img width=75% alt="main_menu_v001" src="https://github.com/user-attachments/assets/92d6501a-c264-4e97-9397-15dde02356fd" />
+<img width=75% alt="quiz_v001" src="https://github.com/user-attachments/assets/a77b1f36-b6c3-4f7d-ae33-0bee45c5ae38" />
