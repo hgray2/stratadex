@@ -1,6 +1,24 @@
+/*
+ * Copyright (C) 2025  Hayden Gray
+
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include <unordered_map>
 
 #include <QUrl>
+#include <QKeyEvent>
 
 #include "ui/ui_quiz.h"
 #include "quiz.hpp"
@@ -14,7 +32,6 @@ ui(new Ui::Quiz)
     this->ui->setupUi(this);
     this->model = StratagemModel::getInstance();
 
-    strat_combo_edit = new StratComboEdit();
     exerciseCount = 0;
 
     /// Sounds
@@ -24,26 +41,20 @@ ui(new Ui::Quiz)
 
     this->passSoundEffect.setSource(QUrl::fromLocalFile(":/resource/sounds/pass_sound.wav"));
     this->passSoundEffect.setLoopCount(1);
-    this->passSoundEffect.setVolume(0.25f);
+    this->passSoundEffect.setVolume(0.75f);
 
     this->failSoundEffect.setSource(QUrl::fromLocalFile(":/resource/sounds/fail_sound.wav"));
     this->failSoundEffect.setLoopCount(1);
     this->failSoundEffect.setVolume(0.25f);
 
-    this->ui->inputLayout->addWidget(strat_combo_edit);
-
-    connect(strat_combo_edit, &StratComboEdit::comboUpdated, this, &Quiz::handleComboUpdated);
+    connect(this, &Quiz::comboUpdated, this, &Quiz::handleComboUpdated);
     connect(ui->quitButton, &QPushButton::clicked, this, [=](){ 
         this->exerciseCount = 0; 
         emit returnToMainMenu(); 
     });
 
-    connect(this, &Quiz::comboPassed, strat_combo_edit, &StratComboEdit::handleComboPassed);
-    connect(this, &Quiz::comboFailed, strat_combo_edit, &StratComboEdit::handleComboFailed);
-
     connect(this, &Quiz::comboPassed, this, &Quiz::handleComboPassed);
     connect(this, &Quiz::comboFailed, this, &Quiz::handleComboFailed);
-
 }
 
 stratadex::Quiz::~Quiz()
@@ -60,8 +71,7 @@ void Quiz::startQuiz()
     this->ui->quizProgress->setMaximum(model->getNumExercises());
     this->ui->quizProgress->setValue(0);
 
-    // We want to give the edit focus immediately.
-    this->strat_combo_edit->setFocus();
+    this->setFocus();
 }
 
 void stratadex::Quiz::pickNewStrat()
@@ -99,7 +109,7 @@ void stratadex::Quiz::pickNewStrat()
 void Quiz::handleComboUpdated()
 {
     std::vector<ComboDirection> activeComboSequence = this->activeStratagem.getComboSequence();
-    std::vector<ComboDirection> inputComboSequence = this->strat_combo_edit->getComboSequence();
+    std::vector<ComboDirection> inputComboSequence = this->combo_sequence;
 
     bool match = true;
     for(uint8_t i = 0; i < inputComboSequence.size(); i++){
@@ -129,14 +139,12 @@ void Quiz::handleComboUpdated()
             }  
 
             arrowLabel->setPixmap(icon.pixmap(QSize(25,25)));
-            
-
         }
     }
 
     // If we matched so far AND the sequences are the same length, check if we passed.
     if(match && activeComboSequence.size() == inputComboSequence.size()){
-        if(activeComboSequence == this->strat_combo_edit->getComboSequence()){
+        if(activeComboSequence == inputComboSequence){
             emit comboPassed();
         }
     } else{
@@ -192,6 +200,8 @@ void stratadex::Quiz::addComboIcons()
 
 void Quiz::handleComboPassed(){
 
+    combo_sequence.clear();
+
     this->passSoundEffect.play();
     this->ui->quizProgress->setValue(exerciseCount);
 
@@ -205,9 +215,40 @@ void Quiz::handleComboPassed(){
 }
 
 void Quiz::handleComboFailed(){
+
+    combo_sequence.clear();
+
     this->failSoundEffect.play();
 
     // Reset the combo icons
     clearComboIcons();
     addComboIcons();
+}
+
+void stratadex::Quiz::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key()){
+        case Qt::Key::Key_W:
+            qDebug() << "UP";   
+            this->combo_sequence.push_back(ComboDirection::UP);
+            emit comboUpdated();
+            break;
+        case Qt::Key::Key_S:
+            qDebug() << "DOWN";   
+            this->combo_sequence.push_back(ComboDirection::DOWN);
+            emit comboUpdated();
+            break;
+        case Qt::Key::Key_A:
+            qDebug() << "LEFT";   
+            this->combo_sequence.push_back(ComboDirection::LEFT);
+            emit comboUpdated();
+            break;
+        case Qt::Key::Key_D:
+            qDebug() << "RIGHT";   
+            this->combo_sequence.push_back(ComboDirection::RIGHT);
+            emit comboUpdated();
+            break;
+        default:
+            break;
+    }
 }

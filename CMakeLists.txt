@@ -2,18 +2,15 @@ cmake_minimum_required(VERSION 3.31)
 
 project(
     "Stratadex"
-    VERSION "0.0.0"
+    VERSION "0.0.1"
     LANGUAGES "CXX"
 )
-
-# list(APPEND CMAKE_PREFIX_PATH "C:/Qt/6.9.1/msvc2022_64/lib/cmake/Qt6")
 
 set(CMAKE_CXX_STANDARD 17)
 set(AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 COMPONENTS Core Gui Multimedia Widgets REQUIRED)
-
 
 qt_standard_project_setup()
 
@@ -25,7 +22,6 @@ set(SRCS
     src/main_window.cpp
     src/stratagem.cpp
     src/stratagem_model.cpp
-    src/strat_combo_edit.cpp
 )
 
 set(EXEC_TARGET "Stratadex")
