@@ -34,6 +34,13 @@ qt_add_executable(${EXEC_TARGET} WIN32 ${SRCS})
 
 target_include_directories(${EXEC_TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/project_config.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/project_config.h
+)
+
+target_include_directories(${EXEC_TARGET} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
 # qt_add_exec links Qt6::Core by default.
 target_link_libraries(${EXEC_TARGET} PUBLIC 
     Qt6::Widgets

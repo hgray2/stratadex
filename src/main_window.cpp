@@ -1,9 +1,10 @@
+#include <QLabel>
+
 #include "main_window.hpp"
-
-#include "ui/ui_stratadex_main_window.h"
-
 #include "main_menu.hpp"
 #include "quiz.hpp"
+#include "project_config.h"
+#include "ui/ui_stratadex_main_window.h"
 
 using namespace stratadex;
 StratadexMainWindow::StratadexMainWindow(QWidget *parent) : 
@@ -35,6 +36,12 @@ ui(new Ui::StratadexMainWindow)
     this->ui->setupUi(this);
 
     this->UpdateCurrentWidget(this->main_menu_widget);
+
+
+    /// Status bar
+
+    QLabel *version_label = new QLabel(QString("version %1.%2.%3").arg(MAJOR_VERSION).arg(MINOR_VERSION).arg(PATCH_VERSION));
+    this->statusBar()->addWidget(version_label);
 }
 
 stratadex::StratadexMainWindow::~StratadexMainWindow()

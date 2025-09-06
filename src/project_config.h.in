@@ -1,0 +1,8 @@
+#ifndef PROJECT_CONFIG_H
+#define PROJECT_CONFIG_H
+
+#define MAJOR_VERSION @Stratadex_VERSION_MAJOR@
+#define MINOR_VERSION @Stratadex_VERSION_MINOR@
+#define PATCH_VERSION @Stratadex_VERSION_PATCH@
+
+#endif
